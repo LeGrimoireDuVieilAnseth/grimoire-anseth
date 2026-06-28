@@ -357,6 +357,28 @@
   .map-pop-x:hover{color:var(--glow);}
   .map-empty{color:var(--ink-faded);font-size:13px;text-align:center;margin-top:12px;font-style:italic;}
   .map-hint{color:var(--ink-faded);font-size:12px;text-align:center;margin-top:8px;}
+  /* ----- Fiche lecture seule ----- */
+  #fiche .fiche-card{position:relative;margin-top:18px;border:1px solid var(--line);border-radius:8px;
+    padding:20px 18px;background:linear-gradient(180deg,rgba(28,36,24,.5),rgba(13,19,11,.55));}
+  .fiche-card .ptag{position:absolute;top:16px;right:16px;font-family:"Cinzel",serif;font-size:10px;
+    letter-spacing:.08em;text-transform:uppercase;padding:4px 9px;border-radius:20px;border:1px solid var(--gold);}
+  .fiche-name{display:flex;align-items:center;gap:10px;font-family:"Cinzel",serif;font-size:23px;
+    color:var(--glow);margin-bottom:14px;padding-right:80px;line-height:1.2;}
+  .fiche-row{display:flex;gap:12px;padding:8px 0;border-top:1px solid var(--line);font-size:15px;}
+  .fiche-row:first-of-type{border-top:0;}
+  .fiche-row .fl{flex:0 0 92px;color:var(--ink-faded);text-transform:uppercase;letter-spacing:.06em;
+    font-size:11px;font-family:"Cinzel",serif;padding-top:3px;}
+  .fiche-row .fv{color:var(--ink);}
+  .fiche-notes{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);color:var(--ink);
+    white-space:pre-wrap;line-height:1.6;}
+  .fiche-quetes{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);}
+  .fiche-quetes .fl{color:var(--ink-faded);text-transform:uppercase;letter-spacing:.06em;font-size:11px;
+    font-family:"Cinzel",serif;margin-bottom:8px;}
+  .fiche-actions{margin-top:22px;display:flex;flex-direction:column;gap:10px;}
+  .fiche-actions .btn-save{flex:none;}
+  .btn-ghost{background:none;border:1px solid var(--line);color:var(--ink-dim);font-family:"Cinzel",serif;
+    font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:12px;border-radius:4px;cursor:pointer;}
+  .btn-ghost:hover{color:var(--glow);border-color:var(--gold);}
 </style>
 </head>
 <body>
@@ -489,6 +511,12 @@
         <button onclick="importBackup()">Restaurer ce texte</button>
       </div>
     </details>
+  </section>
+
+  <!-- FICHE (lecture seule) -->
+  <section id="fiche" class="view">
+    <div class="topbar"><button class="back" onclick="openRencontres()">&lsaquo; Carnet</button><span class="bar-title" id="ficheBarName">Fiche</span></div>
+    <div id="ficheBody"></div>
   </section>
 
   <!-- FICHE EDIT -->
@@ -2007,7 +2035,7 @@ function setView(id){
 }
 function updateTabbar(id){
   const bar=document.getElementById("tabbar"); if(!bar) return;
-  const HIDE=["reading","rencontre-edit","quete-edit"];
+  const HIDE=["reading","fiche","rencontre-edit","quete-edit"];
   const hide=HIDE.indexOf(id)>=0;
   bar.style.display=hide?"none":"flex";
   document.body.classList.toggle("has-tabbar", !hide);
@@ -2219,7 +2247,7 @@ function buildPersonCard(p){
   const rc=RACES[p.race]||RACES.autre;
   const b=document.createElement("button");
   b.className="person"; b.style.setProperty("--pcolor",rc.color);
-  b.onclick=()=>openEdit(p.id);
+  b.onclick=()=>openFiche(p.id);
   const nom=((p.prenom||"")+" "+(p.nom||"")).trim()||"Inconnu";
   const m1=METIERS[p.metier], m2=METIERS[p.metier2];
   const metLabels=[m1?m1.label:(p.metier||""), m2?m2.label:(p.metier2||"")].filter(Boolean);
@@ -2270,6 +2298,38 @@ function openRencontres(){
   const bb=document.getElementById("backupBox"); if(bb) bb.value=JSON.stringify(loadRoster());
   renderRoster();
   setView("rencontres");
+}
+
+function openFiche(id){
+  setAccent(GOLD);
+  const p = id ? loadRoster().find(x=>x.id===id) : null;
+  if(!p){ openRencontres(); return; }
+  const rc=RACES[p.race]||RACES.autre, t=TRUST[p.fiabilite]||TRUST.neutre;
+  const nom=((p.prenom||"")+" "+(p.nom||"")).trim()||"Inconnu";
+  const m1=METIERS[p.metier], m2=METIERS[p.metier2];
+  const metLabels=[m1?m1.label:(p.metier||""), m2?m2.label:(p.metier2||"")].filter(Boolean);
+  const icons=[(m1&&m1.icon)||"", (m2&&m2.icon)||""].filter(Boolean).map(ic=>'<span class="picon">'+ic+'</span>').join('');
+  const pl=(typeof PLACE_BY_KEY!=="undefined")?PLACE_BY_KEY[p.place]:null;
+  const linked = loadQuetes().filter(q=>q.personId===id);
+  const row=(l,v)=>'<div class="fiche-row"><span class="fl">'+l+'</span><span class="fv">'+v+'</span></div>';
+  let h='<div class="fiche-card">';
+  h+='<span class="ptag" style="color:'+t.color+';border-color:'+t.color+'">'+esc(t.label)+'</span>';
+  h+='<div class="fiche-name">'+(icons?'<span class="picons">'+icons+'</span>':'')+'<span>'+esc(nom)+'</span></div>';
+  if(p.race && p.race!=="autre") h+=row("Race",'<span style="color:'+rc.color+'">'+esc(rc.label)+'</span>');
+  if(metLabels.length) h+=row("Métier",esc(metLabels.join(" \u00b7 ")));
+  if(p.origine) h+=row("Origine",esc(p.origine));
+  if(p.lieu) h+=row("Rencontre",esc(p.lieu));
+  if(pl) h+=row("Sur la carte",esc(pl.name));
+  if(p.notes) h+='<div class="fiche-notes">'+esc(p.notes)+'</div>';
+  if(linked.length){
+    h+='<div class="fiche-quetes"><div class="fl">Quêtes liées</div><div class="linked-quetes">'+linked.map(q=>'<button type="button" class="lq" onclick="openQueteEdit(\''+q.id+'\')">'+(q.done?'\u2713 ':'')+esc(q.title||"(sans titre)")+'</button>').join('')+'</div></div>';
+  }
+  h+='<div class="fiche-actions"><button class="btn-save" onclick="openEdit(\''+id+'\')">Modifier la fiche</button>';
+  if(pl) h+='<button class="btn-ghost" onclick="openCarte()">Voir sur la carte</button>';
+  h+='</div></div>';
+  document.getElementById("ficheBody").innerHTML=h;
+  document.getElementById("ficheBarName").textContent=nom;
+  setView("fiche");
 }
 
 function openEdit(id){
@@ -2427,7 +2487,7 @@ function showMapPop(id){
     +'<div class="pmeta"><span style="color:'+rc.color+'">'+esc(rc.label)+'</span>'+(mets?' \u00b7 '+esc(mets):'')+'</div>'
     +'<div class="pmeta">'+(pl?'Lieu : '+esc(pl.name)+' \u00b7 ':'')+'<span style="color:'+t.color+'">'+esc(t.label)+'</span></div>'
     +(p.notes?'<div class="pnotes">'+esc(p.notes)+'</div>':'')
-    +'<div class="brow"><button class="btn-save" onclick="openEdit(\''+p.id+'\')">Ouvrir la fiche</button></div>';
+    +'<div class="brow"><button class="btn-save" onclick="openFiche(\''+p.id+'\')">Ouvrir la fiche</button></div>';
   pop.hidden=false;
 }
 function hideMapPop(){ const e=document.getElementById("mapPop"); if(e){ e.hidden=true; e.innerHTML=""; } }
