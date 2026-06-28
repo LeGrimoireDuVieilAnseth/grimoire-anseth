@@ -397,6 +397,23 @@
     <p class="foot" id="readFoot"></p>
   </section>
 
+  <!-- BONNE BOUFFE & BREUVAGE -->
+  <section id="bouffe" class="view">
+    <div class="topbar"><button class="back" onclick="goHome()">&lsaquo; Menu</button><span class="bar-title">Bonne Bouffe &amp; Breuvage</span></div>
+    <div class="screen-head">
+      <div class="kicker">Le festin du conteur</div>
+      <h2>Bonne Bouffe &amp; Breuvage</h2>
+      <p>Des récits pour mettre l'eau à la bouche et l'envie au gosier. À conter quand la taverne sent bon.</p>
+    </div>
+    <div class="legend-hint">
+      <span><span class="swatch-cue">texte gris</span> = ne pas lire, c'est ton indication</span>
+      <span><b>texte clair</b> = à dire à voix haute</span>
+      <span><span class="swatch-dia">NOM</span> = un personnage parle</span>
+    </div>
+    <div class="prose" id="bouffeProse"></div>
+    <p class="foot">Que vos tablées soient joyeuses et vos chopes jamais vides.</p>
+  </section>
+
   <!-- AIDE -->
   <section id="aide" class="view">
     <div class="topbar"><button class="back" onclick="goHome()">&lsaquo; Menu</button><span class="bar-title">Aide à la lecture</span></div>
@@ -1668,6 +1685,154 @@ Qui sait, mes enfants, ce que la montagne dirait de vous ?`}
   ]}
 ];
 
+/* ===================== BONNE BOUFFE & BREUVAGE ===================== */
+const BOUFFE_STORIES = [
+  {
+    id:"festin_blancherive",
+    title:"Le Grand Festin de Blancherive",
+    sub:"Une nuit de tempête, une taverne, et les meilleurs plats de la plaine.",
+    body:`~le conteur s'approche du feu, pose sa chope avec un sourire entendu, et laisse le silence s'installer un moment avant de parler
+
+Approchez, voyageurs.
+
+Asséchez vos manteaux et réchauffez vos os.
+
+Laissez-moi vous conter l'histoire du Grand Festin de Hulda — une nuit que même les Compagnons de Jouvence n'ont pas oubliée.
+
+~respire
+
+C'était en plein cœur de Tirdas, après la première grande tempête de Morndas qui avait enseveli la plaine de Blancherive sous trois pieds de neige.
+
+Les gardes avaient barré les portes de la cité.
+
+Les marchands maudissaient les cieux depuis leurs étals gelés.
+
+Et même les Compagnons — ces guerriers fiers comme des dragons — avaient renoncé à partir en chasse ce soir-là.
+
+Hulda, la patronne de la Fléchette Noyée, avait souri en voyant ses portes s'ouvrir les unes après les autres.
+
+~sourire dans la voix
+Elle avait su, elle, que cette nuit serait sa nuit.
+
+~silence
+
+D'abord, elle avait jeté au feu deux gigots de cerf marinés depuis trois jours dans de la sève de pin et du sel gemme de la Marche de l'Est.
+
+La graisse avait coulé dans les braises avec un crépitement qui avait fait retourner toutes les têtes.
+
+L'odeur — oh, l'odeur, mes amis — avait traversé la salle comme une flèche de Bosmer.
+
+~voix basse, presque rêveuse
+Quelque chose entre la forêt après la pluie et la promesse d'une bonne nuit.
+
+~respire
+
+Le clou du festin, c'était la miche de Hulda.
+
+Un pain noir, dense, cuit dans les cendres selon les traditions des Nordiques de la toundra.
+
+Une croûte si épaisse qu'elle aurait résisté à la mâchoire d'un troll.
+
+~sourire dans la voix
+Mais un intérieur moelleux comme les nuages au-dessus de la Gorge du Monde.
+
+Hulda l'avait fendu en deux devant tous, et une vapeur parfumée à l'ail sauvage et au romarin s'en était échappée.
+
+On l'avait trempé dans le bouillon de cerf jusqu'à saturation.
+
+Et certains disent qu'un vieux guerrier Compagnon avait fermé les yeux en mâchant...
+
+~silence
+
+...et qu'il avait souri pour la première fois depuis la guerre.`
+  },
+  {
+    id:"hulda_dialogue",
+    title:"La Parole de Hulda",
+    sub:"Ce qu'elle dit ce soir-là, et ce qui s'ensuivit.",
+    body:`~enchaîner ou jouer seul selon l'humeur de la table
+
+~Hulda se redresse derrière son comptoir, les mains sur les hanches
+
+>HULDA|voix forte, assurée|Ce soir, personne ne repart le ventre vide. Pas sous mon toit. Pas par une nuit pareille.
+
+~un silence. Puis les chopes s'élèvent d'un seul élan — lève la tienne si tu le sens
+
+>À HULDA||À Hulda !
+
+~monte le ton
+Et les murs de la Fléchette Noyée avaient tremblé sous les vivats.
+
+~respire, laisse retomber
+
+Et le vin, me demanderez-vous ?
+
+Hulda avait sorti ce soir-là ses meilleures bouteilles de vin Colovien des caves de Cyrodiil.
+
+Un rouge profond comme du sang de dragon.
+
+Il sentait la mûre noire, le cuir tanné, et quelque chose d'indéfinissable — peut-être la magie, peut-être juste les années.
+
+On le servait chaud, dans des hanaps d'étain poli.
+
+~voix basse, presque complice
+Et il descendait avec une douceur trompeuse — la douceur de ces choses qui vous font oublier que la nuit avance.
+
+~respire
+
+Pour ceux qui préféraient la bière — et il y en avait, les Dieux en soient loués — Brenuin avait révélé ce soir-là qu'il gardait cachée sous son banc une flasque de bière noire de Rifton, brassée par les Maîtres-brasseurs de Mielébullition.
+
+~Brenuin pose la flasque sur la table avec la solennité d'une relique de Dibella
+
+>BRENUIN|vieux, bourru|J'la gardais pour une grande occasion.
+
+>HULDA|sourire, douce ironie|Et bien... il me semble que ce soir en est une.
+
+~reprends le fil, savoureux
+
+Amère comme la bile d'un Hagraven.
+
+Mousseuse comme les chutes de Faucrepos.
+
+~pause
+Avec ce fond de miel sauvage qui revenait longtemps après la dernière gorgée.
+
+Quatre Compagnons et deux gardes se l'étaient partagée en jurements de fraternité éternelle.
+
+~silence
+
+Cette nuit-là, personne ne pensa aux dragons.
+
+Personne ne pensa à Alduin, ni aux Stormcloaks, ni aux Impériaux, ni aux maux de Nirn.
+
+Il y avait juste le feu.
+
+Le fumet du gibier.
+
+Le chant ivre de Mikael le barde qui avait, pour une fois, chanté quelque chose de bien.
+
+Et cette paix rare que seuls les dieux connaissent entre deux batailles.
+
+~le conteur pose sa chope et sourit, un œil complice
+
+>ANSETH|souriant, complice|Alors, l'ami... tu reprendras bien quelque chose ?`
+  }
+];
+
+function openBouffe(){
+  setView("bouffe");
+  const el = document.getElementById("bouffeProse");
+  el.innerHTML = BOUFFE_STORIES.map(s=>`
+    <div style="margin-bottom:32px;padding-bottom:28px;border-bottom:1px solid var(--line);">
+      <div style="font-family:'Cinzel',serif;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;">Récit</div>
+      <div style="font-family:'Cinzel',serif;font-size:20px;color:var(--glow);margin-bottom:4px;">${esc(s.title)}</div>
+      <div style="font-style:italic;color:var(--ink-dim);font-size:14.5px;margin-bottom:18px;">${esc(s.sub)}</div>
+      <div>${renderProse(s.body)}</div>
+    </div>
+  `).join("");
+  updateTabbar("bouffe");
+}
+
 /* ===================== HELPERS ===================== */
 function wordCount(body){
   let n=0;
@@ -1848,6 +2013,7 @@ function buildHome(){
   const rubriques=[
     {ico:ICO.pres,label:"Se présenter", sub:"Ton entrée en scène, selon qui te fait face.", right:FLAT_PRES.length, fn:openPresenter},
     {ico:ICO.hist,label:"Histoires", sub:STORY_CATS.reduce((n,c)=>n+c.stories.length,0)+" récits, rangés par catégorie.", right:STORY_CATS.reduce((n,c)=>n+c.stories.length,0), fn:openHistoires},
+    {ico:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M18 8h1a4 4 0 0 1 0 8h-1'/><path d='M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z'/><path d='M6 1v3'/><path d='M10 1v3'/><path d='M14 1v3'/></svg>",label:"Bonne Bouffe &amp; Breuvage", sub:"Récits à conter quand la taverne sent bon et les chopes débordent.", right:BOUFFE_STORIES.length, fn:openBouffe},
     {ico:ICO.sed,label:"Séduction", sub:"Une approche pour charmer, selon sa race.", right:FLAT_SEDUCTION.length, fn:openSeduction},
     {ico:ICO.renc,label:"Rencontres et personnages", sub:"Qui tu croises, d'où ils viennent, sont-ils sûrs.", right:loadRoster().length, fn:openRencontres},
     {ico:ICO.quete,label:"Quêtes", sub:"Tes tâches à ne pas oublier.", right:loadQuetes().filter(q=>!q.done).length, fn:openQuetes},
